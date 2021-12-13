@@ -84,3 +84,6 @@ def login_view(request):
             context = {"error": "Invalid username or password"}
             return render(request, "stages/accounts/login.html",context)
         login(request,user)
+def logout_view(request):
+    if request.method == "POST":
+        logout(request)        
