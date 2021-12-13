@@ -126,6 +126,52 @@ def new_project(request):
 def view_projects(request):
     projects=Project.all_projects()
     form=ProjectForm()
-    return render(request, 'index.html',{"projects":projects,"form":form})     
+    return render(request, 'index.html',{"projects":projects,"form":form})  
+
+@login_required(login_url='/accounts/login/')
+def rate_project(request,id):
+    try:
+        project = Project.objects.get(pk = id)
+        ratings=Rate.get_ratings()
+        
+    except Project.DoesNotExist:
+        raise Http404()
+    current_user = request.user
+    if request.method == 'POST':
+        form = RatingForm(request.POST)
+        if form.is_valid():
+            design = form.cleaned_data['design']
+            usability = form.cleaned_data['usability']
+            content = form.cleaned_data['content']
+            rate = form.save(commit=False)
+            rate.project = project
+            rate.user = current_user
+            rate.design = design
+            rate.usability = usability
+            rate.content = content
+            rate.save()
+            
+    all_ratings=Rate.objects.filter( project = id)
+            
+    designs = [d.design for d in all_ratings]
+    design_average = sum(designs) / len(designs)
+    
+    usabilities = [u.usability for u in all_ratings]
+    usability_average = sum(usabilities) / len(usabilities)
+    
+    contents = [c.content for c in all_ratings]
+    content_average = sum(contents) / len(contents)
+    
+    score=(content_average + usability_average + design_average) / 3
+    percent=score / 10 * 100
+
+
+            
+            
+    form = RatingForm()
+    return render(request,'rate.html',locals())
+    
+    
+    
 
                 
