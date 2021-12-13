@@ -105,4 +105,23 @@ def editProfile(request):
         
     }
     return render (request, "accounts/edit_profile.html",context)  
+class PasswordsChangeView(PasswordChangeView):
+    form_class = PasswordChangeForm
+    success_url = reverse_lazy('welcome')  
+    
+@login_required(login_url='/accounts/login/')
+def new_project(request):
+    current_user = request.user
+    if request.method == 'POST':
+        form = ProjectForm(request.POST, request.FILES)
+        if form.is_valid():
+            project = form.save(commit=False)
+            project .user = current_user
+            project .save()
+            return redirect('welcome')
+
+    else:
+        form = ProjectForm()
+    return render(request, 'project.html', {"form": form})    
+
                 
