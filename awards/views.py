@@ -31,7 +31,7 @@ class edit_profile(generic.UpdateView):
     fields=['bio','profile_pic','twitter_url']
     success_url=reverse_lazy('')
 
-    def usersignup(request):
+    def signup(request):
      if request.method == 'POST':
         form = UserSignUpForm(request.POST)
         if form.is_valid():
@@ -73,7 +73,7 @@ def activate_account(request, uidb64, token):
         
     else:
         return HttpResponse('Activation link is invalid!')
-def login_view(request):
+def login(request):
     if request.method == "POST":
         username = request.POST.get("username")
         password = request.POST.get("password")
@@ -84,6 +84,6 @@ def login_view(request):
             context = {"error": "Invalid username or password"}
             return render(request, "stages/accounts/login.html",context)
         login(request,user)
-def logout_view(request):
+def logout(request):
     if request.method == "POST":
         logout(request)        
