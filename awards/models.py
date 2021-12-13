@@ -44,4 +44,40 @@ class Project(models.Model):
     
     @classmethod
     def all_projects(cls):
-        return cls.objects.all()    
+        return cls.objects.all()   
+
+class Rate(models.Model):  
+    ratings= (
+    (1, "1"),
+    (2, "2"),
+    (3, "3"),
+    (4, "4"),
+    (5, "5"),
+    (6, "6"),
+    (7, "7"),
+    (8, "8"),
+    (9, "9"),
+    (10, "10"),
+    )
+    design=models.IntegerField(choices=ratings,default=0,blank=True)
+    usability=models.IntegerField(choices=ratings,default=0,blank=True)
+    content=models.IntegerField(choices=ratings,default=0,blank=True)
+    user=models.ForeignKey(User, on_delete=models.CASCADE,null=True)
+    project=models.ForeignKey(Project, on_delete=models.CASCADE,null=True,blank=True)
+    
+    def save_rating(self):
+        self.save()   
+    
+    @classmethod  
+    def get_ratings(cls):    
+        ratings=Rate.objects.all()
+        return ratings
+    
+    def __str__(self):
+        return f'{self.project} Rate'
+
+
+          
+    
+   
+
