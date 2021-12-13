@@ -22,6 +22,23 @@ class ProfileForm(forms.ModelForm):
 class ProfileUpdateForm(forms.ModelForm):
             class Meta:
                 model=Profile
-                fields = ['bio','profile_pic','twitter_url']        
+                fields = ['bio','profile_pic','twitter_url']    
 
+                    
+class UserUpdateForm(forms.ModelForm):
+            class Meta:
+                model=User
+                fields = ['username','email']                
+       
+       
+class ProjectForm(forms.ModelForm):
+    class Meta:
+        model=Project  
+        fields = ['title','url','description','photo']     
+        
+class RatingForm(forms.ModelForm):
+    class Meta:
+        model=Rate 
+        fields = ['design','usability','content']       
+ 
 
