@@ -73,3 +73,14 @@ def activate_account(request, uidb64, token):
         
     else:
         return HttpResponse('Activation link is invalid!')
+def login_view(request):
+    if request.method == "POST":
+        username = request.POST.get("username")
+        password = request.POST.get("password")
+        print(username,password)
+        
+        user = authenticate(request, password=password, username=username)
+        if user is None:
+            context = {"error": "Invalid username or password"}
+            return render(request, "stages/accounts/login.html",context)
+        login(request,user)
