@@ -5,12 +5,12 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
-    path('login/', views.login_view, name='login'),
+    path('login/', views.login, name='login'),
     path('', views.view_projects, name='welcome'),
-    path('signup/', views.usersignup, name='signup'),
+    path('signup/', views.signup, name='signup'),
     path('activate/<uidb64>/<token>/',
         views.activate_account, name='activate'),
-    path('logout/', views.logout_view, name='logout'),
+    path('logout/', views.logout, name='logout'),
     path('password_change/', views.PasswordsChangeView.as_view(), name='password_change'),
     path('accounts/', include('django_registration.backends.activation.urls')),
     path('accounts/', include('django.contrib.auth.urls')),
