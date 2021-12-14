@@ -1,7 +1,7 @@
 ### Project-Name
 Awardz
 ### Description
-
+ This is an application that  allows a user to post a project he/she has created and get it reviewed by others.
 ### Author
 <a href="https://github.com/synthiakageni"> SYNTHIA KAGENI</a>
 
