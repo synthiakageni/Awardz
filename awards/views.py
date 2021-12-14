@@ -86,7 +86,10 @@ def login(request):
         login(request,user)
 def logout(request):
     if request.method == "POST":
-        logout(request)   
+        logout(request) 
+def view_profile(request):
+ 
+    return render (request, "accounts/profile.html")            
 def editProfile(request):
     if request.method=='POST':
         user_form=UserUpdateForm(request.POST, instance=request.user)
@@ -126,7 +129,8 @@ def new_project(request):
 def view_projects(request):
     projects=Project.all_projects()
     form=ProjectForm()
-    return render(request, 'index.html')  
+    return render(request, 'index.html',{"projects":projects,"form":form})
+
 
 @login_required(login_url='/accounts/login/')
 def rate_project(request,id):
@@ -170,7 +174,9 @@ def rate_project(request,id):
             
     form = RatingForm()
     return render(request,'rate.html',locals())
-
+    
+    
+    
 def search_results(request):
        if 'project' in request.GET and request.GET["project"]:
               search_term=request.GET.get("project")

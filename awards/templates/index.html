@@ -3,7 +3,8 @@
 {% load static %}
 {% load django_bootstrap5 %}
 {% block styles %} 
-
+{% bootstrap_css %}
+  <link rel="stylesheet" href="{% static 'css/index.css' %}"> 
   
   {% endblock %}
 
@@ -15,6 +16,9 @@
 <div class="container">
 
     <div class="row" style="margin-left: 10px;">
+      <div class="col-md-3">
+
+      
         {% for project in projects %}
         <div class="card" style="width: 18rem; margin: 10px;">
           <img class="card-img-top" src="{{project.photo.url}}" alt="Card image cap">
@@ -26,13 +30,12 @@
 
           </div>
         </div>
+      </div>
 
         
-          {% empty %}
+         
     </div>
-    <div class="row">
-        <h2 class="text-center">There No Projects Currently</h2>
-    </div>
+    
     {% endfor %}
 
 </div>
