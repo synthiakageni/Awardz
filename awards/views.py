@@ -13,13 +13,13 @@ from django.urls.base import reverse
 from django.views.generic.base import TemplateView
 from .forms import UserSignUpForm,UserUpdateForm,ProfileUpdateForm,ProjectForm,RatingForm
 from django.contrib.sites.shortcuts import get_current_site
-from django.utils.encoding import force_bytes, force_text
+from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.template.loader import render_to_string
 from .token_generator import account_activation_token
 from django.contrib.auth.models import User
 from django.core.mail import EmailMessage
-from django.utils.encoding import force_bytes,force_text,DjangoUnicodeDecodeError
+from django.utils.encoding import force_bytes,DjangoUnicodeDecodeError
 from django.contrib.auth.decorators import login_required
 from django.views import generic
 from django.views.generic.edit import UpdateView
@@ -31,7 +31,7 @@ class edit_profile(generic.UpdateView):
     fields=['bio','profile_pic','twitter_url']
     success_url=reverse_lazy('')
 
-    def signup(request):
+def usersignup(request):
      if request.method == 'POST':
         form = UserSignUpForm(request.POST)
         if form.is_valid():
@@ -116,8 +116,8 @@ def new_project(request):
         form = ProjectForm(request.POST, request.FILES)
         if form.is_valid():
             project = form.save(commit=False)
-            project .user = current_user
-            project .save()
+            project.user = current_user
+            project.save()
             return redirect('welcome')
 
     else:
@@ -126,7 +126,7 @@ def new_project(request):
 def view_projects(request):
     projects=Project.all_projects()
     form=ProjectForm()
-    return render(request, 'index.html',{"projects":projects,"form":form})  
+    return render(request, 'index.html')  
 
 @login_required(login_url='/accounts/login/')
 def rate_project(request,id):

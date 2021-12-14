@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% load static %}
+{% load django_bootstrap5 %}
+{% block styles %} 
+
+  
+  {% endblock %}
+
+{% block content %}
+{{block.super}}
+
+{% include 'navbar.html' %}
+
+<div class="container">
+
+    <div class="row" style="margin-left: 10px;">
+        {% for project in projects %}
+        <div class="card" style="width: 18rem; margin: 10px;">
+          <img class="card-img-top" src="{{project.photo.url}}" alt="Card image cap">
+          <div class="card-body">
+            <h5 class="card-title" style="font-weight: bold;">{{project.title}}</h5><span> <a class="btn btn-info" href="{{project.url}}" target="_blank">Visit Site</a> </span>{% if user.is_authenticated %}<span> <a class="btn btn-info" href="{% url 'rate_projects'  project.id %}" >Rate</a> </span>{% endif %}
+            <p class="card-text">{{project.description}}</p>
+            <p class="card-text">By: {{project.user.username}}</p>
+            <p class="card-text">Submitted On: {{project.date|date}}</p>
+
+          </div>
+        </div>
+
+        
+          {% empty %}
+    </div>
+    <div class="row">
+        <h2 class="text-center">There No Projects Currently</h2>
+    </div>
+    {% endfor %}
+
+</div>
+
+{% endblock %}
