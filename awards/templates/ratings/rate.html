@@ -14,8 +14,8 @@
 
 {% block styles %}
 {% bootstrap_css %}
-  <link rel="stylesheet" href="{% static 'css/project.css' %}"> 
-   {% endblock %}
+  <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}"> 
+{% endblock %}
 
 </head>
 
@@ -64,14 +64,10 @@
               <div style="color: maroon;" class="text-center" >
                 <h5 >Average Score</h5>
                 <p>{{score|floatformat:2}} Out Of 10
-                </p><span>{{percent|floatformat:2}}%</span>
-              </div>
-             
-
-
-              
-            </p>
-          </div>
+                </p><span>{{percent|floatformat:2}}%</span></p>
+            </div>       
+            
+        </div>
 
       </div>
 

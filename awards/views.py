@@ -134,15 +134,20 @@ def view_projects(request):
 def rate_project(request,id):
     # reviews = Revieww.objects.get(projects_id = id).all()
     # print
+    
     project = Project.objects.get(id = id)
     user = request.user
     if request.method == 'POST':
-        form = RateForm(request.POST)
+        form = RateForm(request.POST)     
+
         if form.is_valid():
+            data = form.cleaned_data
+           
             rate = form.save(commit=False)
             rate.user = user
             rate.projects = project
             rate.save()
+          
             return redirect('welcome')
     else:
         form = RateForm()
