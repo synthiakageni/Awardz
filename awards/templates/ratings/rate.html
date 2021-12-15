@@ -1,59 +1,88 @@
-{% extends 'base.html'%}
-{% load ratings %}
-    {%block content%}
-    {% include "navbar.html" %}
-    <style>
-        body {
-        background-color: #c2c5aa;
-        }
-    </style>
-    <body>
-    <div class="container mt-5">
-        <div class="row">
-            <div class="col-sm">
-                <div class="view view-cascade overlay">
-                    <img class="img-fluid" src="{{projects.photourl}}" alt="project image">
-                    <a href="#!">
-                        <div class="mask rgba-white-slight"></div>
-                    </a>
-                </div>
-            </div>
-            <div class="col-sm">
-                <!-- Card content -->
-                <div class="card-body card-body-cascade text-center">
+{% extends "base.html" %}
+{% load django_bootstrap5 %}
+ {% load static %}
 
-                    <!-- Title -->
-                    <h4 class="card-title"><strong>{{projects.title}}</strong></h4>
-                    <!-- Subtitle -->
-                    <h6 class="font-weight-bold indigo-text py-2">Description</h6>
-                    <!-- Text -->
-                    <p class="card-text">{{projects.description}}
-                    </p>
-                    <a href="{{project.url}}">
-                        <button class="btn btn-primary">View Project</button>
-                    </a>
-                </div>
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Profile</title>
+  {{form.media}}
+
+{% block styles %}
+{% bootstrap_css %}
+  <link rel="stylesheet" href="{% static 'css/project.css' %}"> 
+   {% endblock %}
+
+</head>
+
+{% block content %}
+
+{% include 'navbar.html' %}
+
+<body>
+  
+  
+  <div class="container">
+    <span><form>
+      <input type="button" class="btn btn-primary" value="Go back!" onclick="history.back()">
+     </form></span>
+     <span>    <h4 class="text-center">{{project.title}}</h4>
+     </span>
+    <div class="row">
+      <div class="col-md-5">
+        <div class="projectform">
+
+          <form  action="{%url 'rate_projects' project.id  %}" method="post" enctype="multipart/form-data">
+            {%csrf_token%}
+        
+            {% bootstrap_form form%}
+            <input type="submit" class="btn btn-success btn-lg" value="Submit" style="margin-left: 40%;">
+          </form>
+        
+           {% block scripts %}
+          <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+          {% bootstrap_javascript %}
+           {% endblock %}
+        
             </div>
-        </div>
-        <div class="ratings">
-            <h3 class="pt-3 h2">Rate</h3>
-            <div class="row">
-                <div class="col-sm">
-                    <h4>Usability</h4>
-          {% ratings project %}
-                    <h4>Usability</h4>
-                </div>
-                <div class="col-sm">
-                    <h4>Design</h4>
-                 {% ratings project %}
-                </div>
-                <div class="col-sm">
-                    <h4>Content</h4>
-       {% ratings project %}
-                </div>
-            </div>
-            <a href="{% url 'homepage:rate' projects.id %}" class="h1">Review</a>
+
+      </div>
+      <div class="col-md-7">
+
+        <div class="card text-white bg-success mb-3" style="max-width: 18rem; margin-top: 25px;">
+          <div class="card-header">Average Score</div>
+          <div class="card-body">
+            <h5 class="card-title"></h5>
+            <p class="card-text">
+              <span>Design:{{design_average|floatformat:2}}</span>
+              <span>Usability:{{usability_average|floatformat:2}}</span>
+              <span>Content:{{content_average|floatformat:2}}</span>
+              <div style="color: maroon;" class="text-center" >
+                <h5 >Average Score</h5>
+                <p>{{score|floatformat:2}} Out Of 10
+                </p><span>{{percent|floatformat:2}}%</span>
+              </div>
+             
+
+
+              
+            </p>
+          </div>
+
+      </div>
+
     </div>
-    <div></div></div></body>
-        {%endblock%}
-    </div>
+    
+
+
+  </div>
+
+</body>
+
+</html>
+
+{% endblock %}

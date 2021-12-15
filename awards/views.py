@@ -1,6 +1,6 @@
 import json
 from decimal import Context
-
+from django.contrib import messages
 from django.contrib.auth import authenticate, forms, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import PasswordChangeForm, UserCreationForm
@@ -20,7 +20,7 @@ from django.views import generic
 from django.views.generic.base import TemplateView
 from django.views.generic.edit import UpdateView
 
-from .forms import (ProfileUpdateForm, ProjectForm, RateForm, UserSignUpForm,
+from .forms import (ProfileUpdateForm, ProjectForm, RateForm,
                     UserUpdateForm)
 from .models import Profile, Project, Rate
 from .token_generator import account_activation_token
@@ -33,33 +33,22 @@ class edit_profile(generic.UpdateView):
     success_url=reverse_lazy('')
 
 def usersignup(request):
-     if request.method == 'POST':
-        form = UserSignUpForm(request.POST)
+     
+    message = 'CREATE ACCOUNT !'
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
         if form.is_valid():
-            user = form.save(commit=False)
-            user.is_active = False
-            user.save()
-            
-            uidb64 = urlsafe_base64_encode(force_bytes(user.pk))
-            domain = get_current_site(request).domain
-            link=reverse('activate',kwargs={'uidb64':uidb64,'token':account_activation_token.make_token(user)})
-            activate_url='http://'+domain+link
-            
-            email_body='Hi ' +user.username+ ' Please use this link to verify your account\n' +activate_url
-            
-            email_subject = 'Activate Your Account'
-            
-            to_email = form.cleaned_data.get('email')
-            
-            email = EmailMessage(email_subject, email_body, 'francis.kinyae@student.moringaschool.com',[to_email])
-            
-            email.send()
-            
-            return HttpResponse('We have sent you an email, please confirm & activate your email address to complete registration')
-     else:
-        
-        form = UserSignUpForm()
-     return render(request, 'accounts/signup.html', {'form': form})
+            form.save()
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password1']
+            user = authenticate(username=username, password=password)
+            login(request)
+            messages.success(request,("Your account has  succesfully been created!"))
+            return redirect('welcome')
+    else:
+        form = UserCreationForm()
+    return render(request, 'accounts/signup.html',{"message":message, "form":form})
+    
 def activate_account(request, uidb64, token):
     try:
         uid = force_bytes(urlsafe_base64_decode(uidb64))
@@ -75,16 +64,22 @@ def activate_account(request, uidb64, token):
     else:
         return HttpResponse('Activation link is invalid!')
 def login(request):
-    if request.method == "POST":
-        username = request.POST.get("username")
-        password = request.POST.get("password")
-        print(username,password)
-        
-        user = authenticate(request, password=password, username=username)
-        if user is None:
-            context = {"error": "Invalid username or password"}
-            return render(request, "stages/accounts/login.html",context)
-        login(request,user)
+   
+    message = 'Sign In!'
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password1']
+        user = authenticate(username=username, password=password)
+
+        if user is not None:
+            login(request)
+            messages.success(request,f" Hello, {username} welcome to clicksgram")
+            return redirect('welcome')
+        else:
+            messages.success(request,"sorry,try login in again")
+            return render(request,'accounts/login.html')
+    else:
+        return render(request, 'accounts/login.html',{"message":message})
 def logout(request):
     if request.method == "POST":
         logout(request) 
@@ -151,7 +146,7 @@ def rate_project(request,id):
             return redirect('welcome')
     else:
         form = RateForm()
-    return render(request,"rate.html",{"form":form,"project":project})        
+    return render(request,"ratings/rate.html",{"form":form,"project":project})        
 
 
 

@@ -20,7 +20,7 @@ urlpatterns = [
     path('projects/',views.new_project,name='projects'),
     path('rate/<int:id>/',views.rate_project,name='rate_projects'),
     path('search/', views.search_results, name='search_results'),
-    path('profile/',views.view_profile, name='profile'), 
+    path('accounts/profile/',views.view_profile, name='profile'), 
 
 ]
 if settings.DEBUG:

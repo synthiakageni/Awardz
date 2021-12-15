@@ -4,22 +4,23 @@
 {% load django_bootstrap5 %}
 {% block styles %} 
 {% bootstrap_css %}
-  <link rel="stylesheet" href="{% static 'css/index.css' %}"> 
   
+  <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
   {% endblock %}
 
 {% block content %}
 {{block.super}}
 
 {% include 'navbar.html' %}
-
+{%load django_bootstrap5%}
 <div class="container">
-
-    <div class="row" style="margin-left: 10px;">
-      <div class="col-md-3">
+  {% for project in projects %}
+    <div class="row" >
+      
+      <div class="col-md-6">
 
       
-        {% for project in projects %}
+        
         <div class="card" style="width: 18rem; margin: 10px;">
           <img class="card-img-top" src="{{project.photo.url}}" alt="Card image cap">
           <div class="card-body">
@@ -37,6 +38,7 @@
     </div>
     
     {% endfor %}
+    <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
 
 </div>
 

@@ -10,7 +10,7 @@
 
 
  {% block content %}
-
+ 
 <hr>
 <nav class="navbar navbar-expand-sm navbar-custom">
   
@@ -23,7 +23,7 @@
 
     <div class="collapse navbar-collapse " id="navbarCollapse">
         <div class="navbar-nav">
-            <a href="{% url 'welcome' %}" class="nav-item nav-link active" style="color: white;">Home</a>
+            <a href="{% url 'welcome' %}" class="nav-item nav-link active" style="color: blue;">Home</a>
             <a href="#" class="nav-item nav-link"></a>        
         </div>
         <div class=" col-md-4 navbar-right">
@@ -34,7 +34,7 @@
                 <input type="text" class="form-control" placeholder="Search Project" name="project">
                 <br>
                 <div >
-                  <button class="btn btn-success " type="submit"><i></i></button>
+                  <button class="btn btn-success " type="submit"><i></i>search</button>
                 </div>
                 <br>
               </div>
@@ -45,14 +45,14 @@
           
         {% if user.is_authenticated %}
         
-        <div class="navbar-nav ml-auto col-md-4">
+        <div class="navbar-nav ml-auto col-md-4 navbar-right">
             <span><a href="{% url 'projects' %}" class="btn btn-primary" style="background-color: palevioletred; margin-right: 10px;">Add  Project</a>
             </span>
             <span style="color: white; float: right;"> {{user.username}}</span>   
             
         </div>
         {% else %}     
-        <div class="navbar-nav ml-auto">
+        <div class="navbar-nav ml-auto navbar-right">
             <a href="{% url 'signup' %}" class="btn btn-primary" style="color: white; margin-right: 10px;">Register</a>
             <a href="{% url 'login' %}" class="btn btn-primary" style="color: white;">Login</a>
 

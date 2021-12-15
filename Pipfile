@@ -12,6 +12,8 @@ django-tinymce = "*"
 pillow = "*"
 django-forms-bootstrap = "*"
 django-star-ratings = "*"
+django-crispy-forms = "*"
+psycopg2 = "*"
 
 [dev-packages]
 
