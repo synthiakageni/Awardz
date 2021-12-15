@@ -21,27 +21,32 @@
         <span class="navbar-toggler-icon"></span>
     </button>
 
-    <div class="collapse navbar-collapse" id="navbarCollapse">
+    <div class="collapse navbar-collapse " id="navbarCollapse">
         <div class="navbar-nav">
             <a href="{% url 'welcome' %}" class="nav-item nav-link active" style="color: white;">Home</a>
             <a href="#" class="nav-item nav-link"></a>        
         </div>
-        <div class="col-sm-4 col-md-4 navbar-right">
+        <div class=" col-md-4 navbar-right">
 
             <form class="navbar-form" role="search" action="{% url 'search_results' %}">
       
               <div class="input-group">
                 <input type="text" class="form-control" placeholder="Search Project" name="project">
-                <div class="input-group-btn">
-                  <button class="btn btn-primary" type="submit"><i class="glyphicon glyphicon-search"></i></button>
+                <br>
+                <div >
+                  <button class="btn btn-success " type="submit"><i></i></button>
                 </div>
+                <br>
               </div>
       
             </form>
+            
           </div>
+          
         {% if user.is_authenticated %}
-        <div class="navbar-nav ml-auto">
-            <span><a href="{% url 'projects' %}" class="btn btn-primary" style="color: white; margin-right: 10px;">Submit Project</a>
+        
+        <div class="navbar-nav ml-auto col-md-4">
+            <span><a href="{% url 'projects' %}" class="btn btn-primary" style="background-color: palevioletred; margin-right: 10px;">Add  Project</a>
             </span>
             <span style="color: white; float: right;"> {{user.username}}</span>   
             

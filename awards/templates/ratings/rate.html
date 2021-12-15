@@ -1,0 +1,59 @@
+{% extends 'base.html'%}
+{% load ratings %}
+    {%block content%}
+    {% include "navbar.html" %}
+    <style>
+        body {
+        background-color: #c2c5aa;
+        }
+    </style>
+    <body>
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-sm">
+                <div class="view view-cascade overlay">
+                    <img class="img-fluid" src="{{projects.photourl}}" alt="project image">
+                    <a href="#!">
+                        <div class="mask rgba-white-slight"></div>
+                    </a>
+                </div>
+            </div>
+            <div class="col-sm">
+                <!-- Card content -->
+                <div class="card-body card-body-cascade text-center">
+
+                    <!-- Title -->
+                    <h4 class="card-title"><strong>{{projects.title}}</strong></h4>
+                    <!-- Subtitle -->
+                    <h6 class="font-weight-bold indigo-text py-2">Description</h6>
+                    <!-- Text -->
+                    <p class="card-text">{{projects.description}}
+                    </p>
+                    <a href="{{project.url}}">
+                        <button class="btn btn-primary">View Project</button>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="ratings">
+            <h3 class="pt-3 h2">Rate</h3>
+            <div class="row">
+                <div class="col-sm">
+                    <h4>Usability</h4>
+          {% ratings project %}
+                    <h4>Usability</h4>
+                </div>
+                <div class="col-sm">
+                    <h4>Design</h4>
+                 {% ratings project %}
+                </div>
+                <div class="col-sm">
+                    <h4>Content</h4>
+       {% ratings project %}
+                </div>
+            </div>
+            <a href="{% url 'homepage:rate' projects.id %}" class="h1">Review</a>
+    </div>
+    <div></div></div></body>
+        {%endblock%}
+    </div>

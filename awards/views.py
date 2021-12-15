@@ -1,30 +1,31 @@
-from django.shortcuts import render
+import json
 from decimal import Context
-from django.contrib.auth import forms
-from django.shortcuts import render,redirect,get_object_or_404
-from  django.http import HttpResponse,Http404
-from django.contrib.auth.forms import UserCreationForm,PasswordChangeForm
-from django.shortcuts import render,redirect
-from django.contrib.auth import authenticate,login, logout
-from django.contrib.auth.views import PasswordChangeView
-from django.urls import reverse_lazy
-from django.urls import reverse
-from django.urls.base import reverse
-from django.views.generic.base import TemplateView
-from .forms import UserSignUpForm,UserUpdateForm,ProfileUpdateForm,ProjectForm,RatingForm
-from django.contrib.sites.shortcuts import get_current_site
-from django.utils.encoding import force_bytes
-from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
-from django.template.loader import render_to_string
-from .token_generator import account_activation_token
-from django.contrib.auth.models import User
-from django.core.mail import EmailMessage
-from django.utils.encoding import force_bytes,DjangoUnicodeDecodeError
+
+from django.contrib.auth import authenticate, forms, login, logout
 from django.contrib.auth.decorators import login_required
-from django.views import generic
-from django.views.generic.edit import UpdateView
-from .models import Profile,Project,Rate
+from django.contrib.auth.forms import PasswordChangeForm, UserCreationForm
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.models import User
+from django.contrib.auth.views import PasswordChangeView
+from django.contrib.sites.shortcuts import get_current_site
+from django.core.mail import EmailMessage
+from django.http import Http404, HttpResponse, JsonResponse
+from django.shortcuts import get_object_or_404, redirect, render
+from django.template.loader import render_to_string
+from django.urls import reverse, reverse_lazy
+from django.urls.base import reverse
+from django.utils.encoding import DjangoUnicodeDecodeError, force_bytes
+from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
+from django.views import generic
+from django.views.generic.base import TemplateView
+from django.views.generic.edit import UpdateView
+
+from .forms import (ProfileUpdateForm, ProjectForm, RateForm, UserSignUpForm,
+                    UserUpdateForm)
+from .models import Profile, Project, Rate
+from .token_generator import account_activation_token
+
+
 class edit_profile(generic.UpdateView):
     model=Profile
     template='accounts/edit_profile.html'
@@ -89,7 +90,8 @@ def logout(request):
         logout(request) 
 def view_profile(request):
  
-    return render (request, "accounts/profile.html")            
+    return render (request, "accounts/profile.html")  
+              
 def editProfile(request):
     if request.method=='POST':
         user_form=UserUpdateForm(request.POST, instance=request.user)
@@ -133,50 +135,27 @@ def view_projects(request):
 
 
 @login_required(login_url='/accounts/login/')
+
 def rate_project(request,id):
-    try:
-        project = Project.objects.get(pk = id)
-        ratings=Rate.get_ratings()
-        
-    except Project.DoesNotExist:
-        raise Http404()
-    current_user = request.user
+    # reviews = Revieww.objects.get(projects_id = id).all()
+    # print
+    project = Project.objects.get(id = id)
+    user = request.user
     if request.method == 'POST':
-        form = RatingForm(request.POST)
+        form = RateForm(request.POST)
         if form.is_valid():
-            design = form.cleaned_data['design']
-            usability = form.cleaned_data['usability']
-            content = form.cleaned_data['content']
             rate = form.save(commit=False)
-            rate.project = project
-            rate.user = current_user
-            rate.design = design
-            rate.usability = usability
-            rate.content = content
+            rate.user = user
+            rate.projects = project
             rate.save()
-            
-    all_ratings=Rate.objects.filter( project = id)
-            
-    designs = [d.design for d in all_ratings]
-    design_average = sum(designs) / len(designs)
-    
-    usabilities = [u.usability for u in all_ratings]
-    usability_average = sum(usabilities) / len(usabilities)
-    
-    contents = [c.content for c in all_ratings]
-    content_average = sum(contents) / len(contents)
-    
-    score=(content_average + usability_average + design_average) / 3
-    percent=score / 10 * 100
+            return redirect('welcome')
+    else:
+        form = RateForm()
+    return render(request,"rate.html",{"form":form,"project":project})        
 
 
-            
-            
-    form = RatingForm()
-    return render(request,'rate.html',locals())
-    
-    
-    
+
+
 def search_results(request):
        if 'project' in request.GET and request.GET["project"]:
               search_term=request.GET.get("project")

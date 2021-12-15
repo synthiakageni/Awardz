@@ -11,6 +11,7 @@ django-registration = "*"
 django-tinymce = "*"
 pillow = "*"
 django-forms-bootstrap = "*"
+django-star-ratings = "*"
 
 [dev-packages]
 
