@@ -43,23 +43,14 @@
             
           </div>
           
-        {% if user.is_authenticated %}
+        
         
         <div class="navbar-nav ml-auto col-md-4 navbar-right">
             <span><a href="{% url 'projects' %}" class="btn btn-primary" style="background-color: palevioletred; margin-right: 10px;">Add  Project</a>
             </span>
-            <span style="color: white; float: right;"> {{user.username}}</span>   
-            
+              
         </div>
-        {% else %}     
         
-        {% endif %}
-        <ul class="nav-item dropdown">
-            <a  class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color: white;" style="float: r;">
-            
-                
-                
-            </a>
             
         </ul>
 
