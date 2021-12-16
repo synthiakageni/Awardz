@@ -8,14 +8,9 @@ from django.conf.urls.static import static
 urlpatterns = [
     
     path('', views.view_projects, name='welcome'),
-  
-    path('activate/<uidb64>/<token>/',
-        views.activate_account, name='activate'),
-    
     path('password_change/', views.PasswordsChangeView.as_view(), name='password_change'),
     path('accounts/', include('django_registration.backends.activation.urls')),
     path('accounts/', include('django.contrib.auth.urls')),
-     
     path('edit_profile/',views.editProfile,name='edit_profile'),
     path('projects/',views.new_project,name='projects'),
     path('rate/<int:id>/',views.rate_project,name='rate_projects'),
