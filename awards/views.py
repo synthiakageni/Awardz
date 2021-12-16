@@ -109,7 +109,7 @@ class PasswordsChangeView(PasswordChangeView):
     form_class = PasswordChangeForm
     success_url = reverse_lazy('welcome')  
 
-@login_required(login_url='/accounts/login/')
+
 def new_project(request):
     current_user = request.user
     if request.method == 'POST':
@@ -129,7 +129,7 @@ def view_projects(request):
     return render(request, 'index.html',{"projects":projects,"form":form})
 
 
-@login_required(login_url='/accounts/login/')
+
 
 def rate_project(request,id):
     # reviews = Revieww.objects.get(projects_id = id).all()
