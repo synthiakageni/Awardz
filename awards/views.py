@@ -42,8 +42,8 @@ def usersignup(request):
             username = form.cleaned_data['username']
             password = form.cleaned_data['password1']
             user = authenticate(username=username, password=password)
-            if user is not None:
-                login(request,user)
+           
+            login(request,user)
             messages.success(request,("Your account has  succesfully been created!"))
             return redirect('welcome')
     else:
@@ -73,8 +73,8 @@ def login(request):
         user = authenticate(username=username, password=password)
 
         if user is not None:
-            login(request)
-            messages.success(request,f" Hello, {username} welcome to clicksgram")
+            login(request,user)
+            messages.success(request,f" Hello, {username} welcome to Awardz")
             return redirect('welcome')
         else:
             messages.success(request,"sorry,try login in again")
