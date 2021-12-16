@@ -124,9 +124,9 @@ def new_project(request):
         form = ProjectForm()
     return render(request, 'project.html', {"form": form})   
 def view_projects(request):
-    projects=Project.all_projects()
+    project=Project.all_projects()
     form=ProjectForm()
-    return render(request, 'index.html',{"projects":projects,"form":form})
+    return render(request, 'index.html',{"project":project,"form":form})
 
 
 
@@ -162,7 +162,7 @@ def search_results(request):
               searched_projects =Project.search_project(search_term)
               message=f"{search_term}"
               
-              return render(request, 'search.html',{"message":message,"projects": searched_projects })
+              return render(request, 'search.html',{"message":message,"project": searched_projects })
        else:
               message="You haven't searched for any term"
               return render(request,'search.html',{"message":message})   
