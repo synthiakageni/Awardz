@@ -12,7 +12,7 @@ urlpatterns = [
     path('accounts/', include('django_registration.backends.activation.urls')),
     path('accounts/', include('django.contrib.auth.urls')),
     path('edit_profile/',views.editProfile,name='edit_profile'),
-    path('projects/',views.new_project,name='projects'),
+    path('project/',views.new_project,name='project'),
     path('rate/<int:id>/',views.rate_project,name='rate_projects'),
     path('search/', views.search_results, name='search_results'),
     path('accounts/profile/',views.view_profile, name='profile'), 
