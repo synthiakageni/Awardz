@@ -42,7 +42,8 @@ def usersignup(request):
             username = form.cleaned_data['username']
             password = form.cleaned_data['password1']
             user = authenticate(username=username, password=password)
-            login(request)
+            if user is not None:
+                login(request,user)
             messages.success(request,("Your account has  succesfully been created!"))
             return redirect('welcome')
     else:
