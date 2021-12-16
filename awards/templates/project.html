@@ -28,7 +28,7 @@
 
     <div class="projectform">
 
-  <form  action="{%url 'project'%}" method="post" enctype="multipart/form-data">
+  <form  action="{%url 'projects'%}" method="post" enctype="multipart/form-data">
     {%csrf_token%}
 
     {% bootstrap_form form%}

@@ -109,14 +109,14 @@ class PasswordsChangeView(PasswordChangeView):
     form_class = PasswordChangeForm
     success_url = reverse_lazy('welcome')  
 
-
+@login_required(login_url='/accounts/login/')
 def new_project(request):
-    
+    current_user = request.user
     if request.method == 'POST':
         form = ProjectForm(request.POST, request.FILES)
         if form.is_valid():
             project = form.save(commit=False)
-           
+            project.user = current_user
             project.save()
             return redirect('welcome')
 
@@ -124,12 +124,12 @@ def new_project(request):
         form = ProjectForm()
     return render(request, 'project.html', {"form": form})   
 def view_projects(request):
-    project=Project.all_projects()
+    projects=Project.all_projects()
     form=ProjectForm()
-    return render(request, 'index.html',{"project":project,"form":form})
+    return render(request, 'index.html',{"projects":projects,"form":form})
 
 
-
+@login_required(login_url='/accounts/login/')
 
 def rate_project(request,id):
     # reviews = Revieww.objects.get(projects_id = id).all()
@@ -162,7 +162,7 @@ def search_results(request):
               searched_projects =Project.search_project(search_term)
               message=f"{search_term}"
               
-              return render(request, 'search.html',{"message":message,"project": searched_projects })
+              return render(request, 'search.html',{"message":message,"projects": searched_projects })
        else:
               message="You haven't searched for any term"
               return render(request,'search.html',{"message":message})   
