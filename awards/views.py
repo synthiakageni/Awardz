@@ -32,54 +32,9 @@ class edit_profile(generic.UpdateView):
     fields=['bio','profile_pic','twitter_url']
     success_url=reverse_lazy('')
 
-def usersignup(request):
-     
-    message = 'CREATE ACCOUNT !'
-    if request.method == 'POST':
-        form = UserCreationForm(request.POST)
-        if form.is_valid():
-            form.save()
-            username = form.cleaned_data['username']
-            password = form.cleaned_data['password1']
-            user = authenticate(username=username, password=password)
-            login(request)
-            messages.success(request,("Your account has  succesfully been created!"))
-            return redirect('welcome')
-    else:
-        form = UserCreationForm()
-    return render(request, 'accounts/signup.html',{"message":message, "form":form})
-    
-def activate_account(request, uidb64, token):
-    try:
-        uid = force_bytes(urlsafe_base64_decode(uidb64))
-        user = User.objects.get(pk=uid)
-    except(TypeError, ValueError, OverflowError, User.DoesNotExist):
-        user = None
-    if user is not None and account_activation_token.check_token(user, token):
-        user.is_active = True
-        user.save()
-        login(request, user)
-        return HttpResponse('Your account has been activate successfully')
-        
-    else:
-        return HttpResponse('Activation link is invalid!')
-def login(request):
-   
-    message = 'Sign In!'
-    if request.method == 'POST':
-        username = request.POST['username']
-        password = request.POST['password1']
-        user = authenticate(username=username, password=password)
 
-        if user is not None:
-            login(request)
-            messages.success(request,f" Hello, {username} welcome to clicksgram")
-            return redirect('welcome')
-        else:
-            messages.success(request,"sorry,try login in again")
-            return render(request,'accounts/login.html')
-    else:
-        return render(request, 'accounts/login.html',{"message":message})
+
+  
 def logout(request):
     if request.method == "POST":
         logout(request) 
