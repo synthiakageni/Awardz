@@ -124,9 +124,9 @@ def new_project(request):
         form = ProjectForm()
     return render(request, 'project.html', {"form": form})   
 def view_projects(request):
-    projects=Project.all_projects()
+    project=Project.all_projects()
     form=ProjectForm()
-    return render(request, 'index.html',{"projects":projects,"form":form})
+    return render(request, 'index.html',{"project":project,"form":form})
 
 
 @login_required(login_url='/accounts/login/')
