@@ -32,9 +32,54 @@ class edit_profile(generic.UpdateView):
     fields=['bio','profile_pic','twitter_url']
     success_url=reverse_lazy('')
 
+def usersignup(request):
+     
+    message = 'CREATE ACCOUNT !'
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password1']
+            user = authenticate(username=username, password=password)
+            login(request)
+            messages.success(request,("Your account has  succesfully been created!"))
+            return redirect('welcome')
+    else:
+        form = UserCreationForm()
+    return render(request, 'accounts/signup.html',{"message":message, "form":form})
+    
+def activate_account(request, uidb64, token):
+    try:
+        uid = force_bytes(urlsafe_base64_decode(uidb64))
+        user = User.objects.get(pk=uid)
+    except(TypeError, ValueError, OverflowError, User.DoesNotExist):
+        user = None
+    if user is not None and account_activation_token.check_token(user, token):
+        user.is_active = True
+        user.save()
+        login(request, user)
+        return HttpResponse('Your account has been activate successfully')
+        
+    else:
+        return HttpResponse('Activation link is invalid!')
+def login(request):
+   
+    message = 'Sign In!'
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password1']
+        user = authenticate(username=username, password=password)
 
-
-  
+        if user is not None:
+            login(request)
+            messages.success(request,f" Hello, {username} welcome to clicksgram")
+            return redirect('welcome')
+        else:
+            messages.success(request,"sorry,try login in again")
+            return render(request,'accounts/login.html')
+    else:
+        return render(request, 'accounts/login.html',{"message":message})
 def logout(request):
     if request.method == "POST":
         logout(request) 
@@ -64,14 +109,14 @@ class PasswordsChangeView(PasswordChangeView):
     form_class = PasswordChangeForm
     success_url = reverse_lazy('welcome')  
 
-
+@login_required(login_url='/accounts/login/')
 def new_project(request):
-   
+    current_user = request.user
     if request.method == 'POST':
         form = ProjectForm(request.POST, request.FILES)
         if form.is_valid():
             project = form.save(commit=False)
-           
+            project.user = current_user
             project.save()
             return redirect('welcome')
 
@@ -79,12 +124,12 @@ def new_project(request):
         form = ProjectForm()
     return render(request, 'project.html', {"form": form})   
 def view_projects(request):
-    project=Project.all_projects()
+    projects=Project.all_projects()
     form=ProjectForm()
-    return render(request, 'index.html',{"project":project,"form":form})
+    return render(request, 'index.html',{"projects":projects,"form":form})
 
 
-
+@login_required(login_url='/accounts/login/')
 
 def rate_project(request,id):
     # reviews = Revieww.objects.get(projects_id = id).all()
@@ -117,7 +162,7 @@ def search_results(request):
               searched_projects =Project.search_project(search_term)
               message=f"{search_term}"
               
-              return render(request, 'search.html',{"message":message,"project": searched_projects })
+              return render(request, 'search.html',{"message":message,"projects": searched_projects })
        else:
               message="You haven't searched for any term"
               return render(request,'search.html',{"message":message})   
